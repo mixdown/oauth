@@ -4,7 +4,7 @@
   "description": "OAuth plugins for mixdown",
   "main": "index.js",
   "scripts": {
-    "test": "tape test/*"
+    "test": "tape tests/*"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,6 @@
   "dependencies": {
     "lodash": "~1.3.1",
     "request": "~2.22.0",
-    "googleapis": "~0.2.12-alpha"
+    "oauth": "~0.9.10"
   }
 }

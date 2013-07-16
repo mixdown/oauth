@@ -7,14 +7,19 @@ var App = require('mixdown-server').App,
 var logger = new winston.Logger();
 logger.add(winston.transports.Console, {colorize: true});
 
+global.logger = logger;
+
 var config = {
-    "plugins": {
-        "oauth": {
-            "module": "/plugins/oauth.js",
-            "options": {
-                "client_secret": "v75vSYduofxAu1nizreK4HUT",
-                "client_id": "527660584577.apps.googleusercontent.com",
-                "redirect_uri": "http://localhost:8080/oauth2callback"
+    plugins: {
+        oauth: {
+            module: '/plugins/oauth.js',
+            options: {
+                clientSecret: 'v75vSYduofxAu1nizreK4HUT',
+                clientId: '527660584577.apps.googleusercontent.com',
+                callbackUrl: 'http://localhost:8080/oauth2callback',
+                baseSite: 'https://accounts.google.com',
+                authorizePath: "/o/oauth2/auth",
+                accessTokenPath: '/o/oauth2/token'
             }
         }
     }
@@ -35,7 +40,7 @@ app.init(function () {
 
         if (parsedUrl.pathname === '/') {
             // render login button
-            var authUrl = app.plugins.oauth.google.getAuthUrl();
+            var authUrl = app.plugins.oauth.getAuthUrl();
             
             res.writeHead(200, {'content-type': 'text/html'});
             res.end('<html><head><title>Mixdown OAuth2 Plugin Example</title></head><body><a href="' + authUrl + '">Click to log in</a></body></html>');
@@ -44,7 +49,7 @@ app.init(function () {
         else if (parsedUrl.pathname === '/oauth2callback') {
             logger.log('received oauth2callback, exchanging code for tokens');
 
-            app.plugins.oauth.google.handleAuthResponse(req, function (err, tokens) {
+            app.plugins.oauth.handleAuthCallback(req, function (err, accessToken, refreshToken, response) {
                 if (err) {
                     logger.error('received error exchanging code for tokens', err.stack);
 
@@ -52,10 +57,10 @@ app.init(function () {
                     res.end(err.stack);
                 }
                 else {
-                    logger.debug('received tokens', tokens);
+                    logger.debug('received tokens', response);
 
                     res.writeHead(200, {'content-type': 'text/html'});
-                    res.end(JSON.stringify(tokens));
+                    res.end(JSON.stringify(response));
                 }
             });
         }
