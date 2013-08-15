@@ -23,9 +23,9 @@ var config = {
                 clientSecret: 'v75vSYduofxAu1nizreK4HUT',
                 clientId: '527660584577.apps.googleusercontent.com',
                 callbackUrl: 'http://localhost:8080/oauth2callback',
-                scope: 'openid profile',
-                authorizePath: "https://accounts.google.com/o/oauth2/auth",
-                accessTokenPath: 'https://accounts.google.com/o/oauth2/token'
+                authorizePath: 'https://accounts.google.com/o/oauth2/auth',
+                accessTokenPath: 'https://accounts.google.com/o/oauth2/token',
+                scope: 'openid profile'
             }
         },
         facebook: {
@@ -36,7 +36,8 @@ var config = {
                 clientId: '502218416528431',
                 callbackUrl: 'http://localhost:8080/fboauth2callback',
                 authorizePath: 'https://www.facebook.com/dialog/oauth',
-                accessTokenPath: 'https://graph.facebook.com/oauth/access_token'
+                accessTokenPath: 'https://graph.facebook.com/oauth/access_token',
+                scope: 'email'
             }
         }
     }
