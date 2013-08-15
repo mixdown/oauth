@@ -6,12 +6,11 @@ var options = {
     clientSecret: 'v75vSYduofxAu1nizreK4HUT',
     clientId: '527660584577.apps.googleusercontent.com',
     callbackUrl: 'http://localhost:8080/oauth2callback',
-    baseSite: 'https://accounts.google.com',
-    authorizePath: "/o/oauth2/auth",
-    accessTokenPath: '/o/oauth2/token'
+    authorizePath: "https://accounts.google.com/o/oauth2/auth",
+    accessTokenPath: 'https://accounts.google.com/o/oauth2/token'
 };
 
-suite('OAuth', function () {
+suite('Generic OAuth', function () {
     var oauth;
 
     test('should initialize without error', function () {
@@ -28,8 +27,12 @@ suite('OAuth', function () {
         assert.ok(parsedUrl, 'url is parsable');
         assert.equal(parsedUrl.protocol, 'https:', 'protocol matches');
         assert.equal(parsedUrl.host, 'accounts.google.com', 'host matches');
-        assert.equal(parsedUrl.pathname, options.authorizePath, 'auth path matches');
+        assert.equal(parsedUrl.pathname, '/o/oauth2/auth', 'auth path matches');
         assert.equal(parsedUrl.query.redirect_uri, options.callbackUrl, 'callback matches');
         assert.equal(parsedUrl.query.client_id, options.clientId, 'client id matches');
+    });
+
+    test('should be able to parse callback url', function () {
+        throw new Error('test unimplemented');
     });
 });

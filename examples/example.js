@@ -41,7 +41,30 @@ var config = {
             }
         }
     }
-}
+};
+
+// note that you could also use the google/facebook plugins with a shortened config
+// var config = {
+//     plugins: {
+//         google: {
+//             module: '/plugins/google.js',
+//             options: {
+//                 clientSecret: 'v75vSYduofxAu1nizreK4HUT',
+//                 clientId: '527660584577.apps.googleusercontent.com',
+//                 callbackUrl: 'http://localhost:8080/oauth2callback'
+//             }
+//         },
+//         facebook: {
+//             module: '/plugins/facebook.js',
+//             options: {
+//                 clientSecret: 'a0028d29c434a19f5820484d13b37771',
+//                 clientId: '502218416528431',
+//                 callbackUrl: 'http://localhost:8080/fboauth2callback'
+//             }
+//         }
+//     }
+// };
+
 
 var app = new App(config);
 
@@ -79,7 +102,7 @@ app.init(function () {
                 else {
                     logger.debug('received tokens', response);
 
-                    res.writeHead(200, {'content-type': 'text/html'});
+                    res.writeHead(200, {'content-type': 'application/json'});
                     res.end(JSON.stringify(response));
                 }
             });
@@ -98,7 +121,7 @@ app.init(function () {
                 else {
                     logger.debug('received tokens', response);
 
-                    res.writeHead(200, {'content-type': 'text/html'});
+                    res.writeHead(200, {'content-type': 'application/json'});
                     res.end(JSON.stringify(response));
                 }
             });

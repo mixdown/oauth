@@ -1,27 +1,22 @@
-var _ = require('lodash'),
-    url = require('url'),
-    oauth = require('../plugins/oauth.js'),
-    App = require('mixdown-server').App;
-    assert = require('assert');
+var oauth = require('../plugins/oauth.js');
+var App = require('mixdown-server').App;
+var assert = require('assert');
+var url = require('url');
 
 var config = {
     plugins: {
-        oauth: {
-            module: '/plugins/oauth.js',
+        googleoauth: {
+            module: '/plugins/google.js',
             options: {
-                provider: 'google',
-                clientSecret: 'v75vSYduofxAu1nizreK4HUT',
-                clientId: '527660584577.apps.googleusercontent.com',
-                callbackUrl: 'http://localhost:8080/oauth2callback',
-                authorizePath: "https://accounts.google.com/o/oauth2/auth",
-                accessTokenPath: 'https://accounts.google.com/o/oauth2/token'
+                clientSecret: "oscar's stash of diamonds",
+                clientId: 'sesamestreet',
+                callbackUrl: 'http://localhost:8080/oauth2callback'
             }
         }
     }
 };
 
-suite('Generic OAuth plugin', function () {
-    // TODO - test bad configs?
+suite('Google OAuth plugin', function () {
     var app = new App(config);
 
     test('should init', function (done) {
