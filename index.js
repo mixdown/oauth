@@ -1,1 +1,4 @@
-module.exports = require('plugins/oauth');
+module.exports = {
+    OAuth: require('./lib/oauth'),
+    Plugin: require('./plugin/oauth')
+};
