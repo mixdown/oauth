@@ -1,9 +1,4 @@
-var _ = require('lodash'),
-    OAuth = require('../lib/oauth.js'),
-    url = require('url'),
-    request = require('request'),
-    querystring = require('querystring'),
-    util = require('util');
+var OAuth = require('../lib/oauth.js');
 
 var OAuthPlugin = function () {};
 
