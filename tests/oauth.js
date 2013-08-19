@@ -1,6 +1,7 @@
 var OAuth = require('../lib/oauth.js');
 var assert = require('assert');
 var url = require('url');
+var _ = require('lodash');
 
 var options = {
     clientSecret: 'v75vSYduofxAu1nizreK4HUT',
@@ -16,7 +17,7 @@ suite('Generic OAuth', function () {
     test('should initialize without error', function () {
         oauth = new OAuth(options);
     });
-    
+
     test('should be able to generate an auth url', function () {
         var authUrl = oauth.getAuthUrl();
 
@@ -32,7 +33,78 @@ suite('Generic OAuth', function () {
         assert.equal(parsedUrl.query.client_id, options.clientId, 'client id matches');
     });
 
-    test('should be able to parse callback url', function () {
-        throw new Error('test unimplemented');
+    suite('should be able to handle the auth callback', function () {
+        test('should throw an error when called incorrectly', function () {
+            try {
+                oauth.handleAuthCallback();
+                assert.fail('should throw error if params & callback are omitted');
+            }
+            catch (e) {}
+        });
+
+        suite('should pass an error when the response from the provider looks bad', function () {
+            test('no code or error', function (done) {
+                oauth.handleAuthCallback({}, function (e, token) {
+                    if (!e) {
+                        assert.fail('expected an error');
+                    }
+                    done();
+                });
+            });
+
+            test('error', function (done) {
+                oauth.handleAuthCallback({error: 'wolves ate it'}, function (e, token) {
+                    if (!e) {
+                        assert.fail('expected an error');
+                    }
+                    done();
+                });
+            });
+        });
     });
+
+    var payload = {object: 'is arbitrary', because: 'implementations vary'};
+    var encoded;
+    
+    test('should be able to encode/decode a payload', function (done) {
+        encoded = oauth.encrypt(payload);
+        assert.ok(_.isString(encoded) && encoded.length > 0, 'should get back a non-empty base64 encoded string');
+
+        var decoded = oauth.decrypt(encoded);
+        assert.deepEqual(decoded, payload, 'decryption should produce the same payload that was encoded');
+
+        oauth.verify(encoded, function (e, valid) {
+            if (e) {
+                throw e;
+            }
+
+            assert.ok(valid);
+
+            done();
+        })
+    });
+
+    test('should work with a certificate', function (done) {
+        var opts = _.clone(options);
+        opts.certPath = './tests/cert.txt';
+
+        oauth = new OAuth(opts);
+
+        var encrypted = oauth.encrypt(payload);
+
+        assert.ok(_.isString(encrypted) && encrypted.length > 0, 'should get back a non-empty base64 encoded string');
+        assert.notEqual(encrypted, encoded, 'should be different from non-encrypted identical payload');
+
+        var decrypted = oauth.decrypt(encrypted);
+        assert.deepEqual(decrypted, payload, 'decryption should produce the same payload that was encrypted');
+
+        oauth.verify(encrypted, function (e, valid) {
+            if (e) {
+                throw e;
+            }
+
+            assert.ok(valid);
+            done();
+        })
+    })
 });

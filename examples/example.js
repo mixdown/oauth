@@ -3,16 +3,38 @@
  * callback URLs, but other approaches are possible. For example, you could use the "state" parameter as an option. It
  * would be returned as a query string parameter and could be used to identify the provider.
  **/
-var App = require('mixdown-server').App,
-    http = require('http'),
-    url = require('url'),
-    querystring = require('querystring'),
-    winston = require('winston')
+var App = require('mixdown-server').App
+var http = require('http');
+var url = require('url');
+var querystring = require('querystring');
+var winston = require('winston');
+var fs = require('fs');
+var _ = require('lodash')
 
 var logger = new winston.Logger();
 logger.add(winston.transports.Console, {colorize: true});
 
 global.logger = logger;
+
+var templates = {
+
+};
+
+fs.readFile('./examples/index.html', {encoding: 'utf8'}, function (e, html) {
+    if (e) {
+        logger.error(e);
+    }
+    templates.index = _.template(html);
+});
+
+fs.readFile('./examples/success.html', {encoding: 'utf8'}, function (e, html) {
+    if (e) {
+        logger.error(e);
+    }
+
+    templates.success = _.template(html);
+});
+
 
 var config = {
     plugins: {
@@ -25,7 +47,8 @@ var config = {
                 callbackUrl: 'http://localhost:8080/oauth2callback',
                 authorizePath: 'https://accounts.google.com/o/oauth2/auth',
                 accessTokenPath: 'https://accounts.google.com/o/oauth2/token',
-                scope: 'openid profile'
+                scope: 'openid profile',
+                certPath: './examples/cert.txt'
             }
         },
         facebook: {
@@ -84,15 +107,17 @@ app.init(function () {
             // render login button
             var googleAuthUrl = app.plugins.oauth.google.getAuthUrl();
             var fbAuthUrl = app.plugins.oauth.facebook.getAuthUrl();
+            var html = templates.index({googleAuthUrl: googleAuthUrl, fbAuthUrl: fbAuthUrl});
             
             res.writeHead(200, {'content-type': 'text/html'});
-            res.end('<html><head><title>Mixdown OAuth2 Plugin Example</title></head><body><p><a href="' + googleAuthUrl + '">Click to log in with google</a></p><p><a href="' + fbAuthUrl + '">Click to log in with facebook</a></p></body></html>');
+            res.end(html);
         }
 
         else if (parsedUrl.pathname === '/oauth2callback') {
             logger.info('received oauth2callback, exchanging code for tokens');
             
-            app.plugins.oauth.google.handleAuthCallback(query, function (err, accessToken, refreshToken, response) {
+            app.plugins.oauth.google.handleAuthCallback(query, function (err, token) {
+                logger.info('received token: ' + token);
                 if (err) {
                     logger.error('received error exchanging code for tokens', err.stack);
 
@@ -100,10 +125,12 @@ app.init(function () {
                     res.end(err.stack);
                 }
                 else {
-                    logger.debug('received tokens', response);
+                    logger.debug('received tokens', token);
 
-                    res.writeHead(200, {'content-type': 'application/json'});
-                    res.end(JSON.stringify(response));
+                    var html = templates.success({token: token});
+
+                    res.writeHead(200, {'content-type': 'text/html'});
+                    res.end(html);
                 }
             });
         }
@@ -111,7 +138,8 @@ app.init(function () {
         else if (parsedUrl.pathname === '/fboauth2callback') {
             logger.info('received fboauth2callback, exchanging code for tokens');
 
-            app.plugins.oauth.facebook.handleAuthCallback(query, function (err, accessToken, refreshToken, response) {
+            app.plugins.oauth.facebook.handleAuthCallback(query, function (err, token) {
+                logger.info('received token: ' + token);
                 if (err) {
                     logger.error('received error exchanging code for tokens', err.stack);
 
@@ -119,10 +147,12 @@ app.init(function () {
                     res.end(err.stack);
                 }
                 else {
-                    logger.debug('received tokens', response);
+                    logger.debug('received tokens', token);
 
-                    res.writeHead(200, {'content-type': 'application/json'});
-                    res.end(JSON.stringify(response));
+                    var html = templates.success({token: token});
+                    
+                    res.writeHead(200, {'content-type': 'text/html'});
+                    res.end(html);
                 }
             });
         }
