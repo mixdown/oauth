@@ -105,6 +105,53 @@ suite('Generic OAuth', function () {
 
             assert.ok(valid);
             done();
+        });
+    });
+
+    suite('TTL should be configurable', function () {
+        test('should not validate past expiration', function (done) {
+            var opts = _.clone(options);
+            opts.ttl = 1 // 1 second;
+
+            oauth = new OAuth(opts);
+
+            var payload = {dummy: 'token'};
+            oauth.addExpires(payload);
+            assert.ok(payload.expires, 'should have added expires timestamp');
+
+            var encoded = oauth.encrypt(payload);
+
+            setTimeout(function () {
+                oauth.verify(encoded, function (e, valid) {
+                    assert.ok(!valid, 'should not be valid');
+
+                    done();
+                });
+            }, 1001);
+        });
+
+        test('should be disableable', function (done) {
+            var opts = _.clone(options);
+            opts.ttl = 0;
+
+            oauth = new OAuth(opts);
+
+            var payload = {dummy: 'token'};
+            oauth.addExpires(payload);
+
+            assert.ok(!payload.expires, 'should not have an expires field');
+
+            var encoded = oauth.encrypt(payload);
+
+            oauth.verify(encoded, function (e, valid) {
+                if (e) {
+                    throw e;
+                }
+
+                assert.ok(valid, 'should be valid');
+
+                done();
+            });
         })
     })
 });
