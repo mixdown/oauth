@@ -1,6 +1,6 @@
 {
   "name": "mixdown-oauth",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "OAuth libraries and plugins for mixdown/broadway",
   "main": "index.js",
   "scripts": {
