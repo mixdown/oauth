@@ -20,7 +20,7 @@ var config = {
     }
 };
 
-suite('Generic OAuth plugin', function () {
+suite('OAuth plugin', function () {
     // TODO - test bad configs?
     var app = new App(config);
 
