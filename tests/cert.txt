@@ -1,1 +1,0 @@
-not necessarily a certificate as much as a sufficiently long and arbitrary string of characters as might be reasonably suitable for cryptography

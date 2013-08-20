@@ -4,7 +4,7 @@
   "description": "OAuth libraries and plugins for mixdown/broadway",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -R spec -u tdd tests/*.js "
+    "test": "mocha -R spec -u tdd tests/*.js"
   },
   "repository": {
     "type": "git",

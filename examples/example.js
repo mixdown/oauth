@@ -27,15 +27,6 @@ fs.readFile('./examples/index.html', {encoding: 'utf8'}, function (e, html) {
     templates.index = _.template(html);
 });
 
-fs.readFile('./examples/success.html', {encoding: 'utf8'}, function (e, html) {
-    if (e) {
-        logger.error(e);
-    }
-
-    templates.success = _.template(html);
-});
-
-
 var config = {
     plugins: {
         google: {
@@ -47,8 +38,7 @@ var config = {
                 callbackUrl: 'http://localhost:8080/oauth2callback',
                 authorizePath: 'https://accounts.google.com/o/oauth2/auth',
                 accessTokenPath: 'https://accounts.google.com/o/oauth2/token',
-                scope: 'openid profile',
-                certPath: './examples/cert.txt'
+                scope: 'openid profile'
             }
         },
         facebook: {
@@ -116,8 +106,7 @@ app.init(function () {
         else if (parsedUrl.pathname === '/oauth2callback') {
             logger.info('received oauth2callback, exchanging code for tokens');
             
-            app.plugins.oauth.google.handleAuthCallback(query, function (err, token) {
-                logger.info('received token: ' + token);
+            app.plugins.oauth.google.handleAuthCallback(query, function (err, data) {
                 if (err) {
                     logger.error('received error exchanging code for tokens', err.stack);
 
@@ -125,12 +114,8 @@ app.init(function () {
                     res.end(err.stack);
                 }
                 else {
-                    logger.debug('received tokens', token);
-
-                    var html = templates.success({token: token});
-
-                    res.writeHead(200, {'content-type': 'text/html'});
-                    res.end(html);
+                    res.writeHead(200, {'content-type': 'application/json'});
+                    res.end(JSON.stringify(data));
                 }
             });
         }
@@ -138,8 +123,7 @@ app.init(function () {
         else if (parsedUrl.pathname === '/fboauth2callback') {
             logger.info('received fboauth2callback, exchanging code for tokens');
 
-            app.plugins.oauth.facebook.handleAuthCallback(query, function (err, token) {
-                logger.info('received token: ' + token);
+            app.plugins.oauth.facebook.handleAuthCallback(query, function (err, data) {
                 if (err) {
                     logger.error('received error exchanging code for tokens', err.stack);
 
@@ -147,12 +131,8 @@ app.init(function () {
                     res.end(err.stack);
                 }
                 else {
-                    logger.debug('received tokens', token);
-
-                    var html = templates.success({token: token});
-                    
-                    res.writeHead(200, {'content-type': 'text/html'});
-                    res.end(html);
+                    res.writeHead(200, {'content-type': 'application/json'});
+                    res.end(JSON.stringify(data));
                 }
             });
         }
