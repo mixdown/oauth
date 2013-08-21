@@ -1,5 +1,5 @@
 # mixdown-oauth
-OAuth library and mixdown plugin. Facilitates communication between browsers and OAuth providers.
+OAuth library and [mixdown](https://github.com/mixdown) plugin. Facilitates communication between browsers and OAuth providers. Wraps [node-oauth](https://github.com/ciaranj/node-oauth).
 
 ## Installation
 Install with `npm install mixdown-oauth`.
@@ -11,6 +11,7 @@ See a basic example site with `node examples/example.js`.
 ## Usage
 Just require, configure and use.
 
+### Library
 Here's a simple example configured against Google.
 
 ```
@@ -76,6 +77,32 @@ http.createServer(function (req, req) {
 }).listen(8080);
 ```
 
+### Plugin
+As a mixdown plugin, just point to any of the plugin exports as a module and include your options. Options are the same as the library, with the addition of a required `provider` option, which indicates the attachment point under the OAuth namespace. This allows you to configure multiple OAuth providers or override them if necessary.
+
+```
+{
+    "plugins": {
+        "myOauthProvider": {
+            "module": "mixdown-oauth#Plugin",
+            "options": {
+                "provider": "google",
+                "clientSecret": "v75vSYduofxAu1nizreK4HUT",
+                "clientId": "527660584577.apps.googleusercontent.com",
+                "callbackUrl": "http://localhost:8080/oauth2callback",
+                "authorizePath": "https://accounts.google.com/o/oauth2/auth",
+                "accessTokenPath": "https://accounts.google.com/o/oauth2/token",
+                "scope": "openid profile"
+            }
+        },
+    }
+}
+```
+
+The usual methods will be available on `app.plugins.oauth.google`.
+
+This should also work as a [broadway](https://github.com/flatiron/broadway) plugin, but that is untested.
+
 ## Methods
 ###OAuth(options)
 
@@ -99,7 +126,7 @@ Get the authorization URL for the provider.
 Used to parse the callback response upon login. Call this from your callback handler.
 
 - `params` Generally, you should just pass the parsed query from the request to the callback URL as this parameter. See usage/examples.
-- `callback(error, response)` Callback function. `error` if the authenticaiton failed, otherwise the response data as JSON (after passed through `parseResponse`).
+- `callback(error, response)` Callback function. `error` if the authentication failed, otherwise the response data as an object (after passed through `parseResponse`).
 
 ### parseResponse(response)
 
