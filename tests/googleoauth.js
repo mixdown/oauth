@@ -1,4 +1,4 @@
-var GoogleOAuth = require('../lib/google.js');
+var GoogleOAuth = require('../').GoogleOAuth;
 var assert = require('assert');
 var url = require('url');
 

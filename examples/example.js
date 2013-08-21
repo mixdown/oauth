@@ -30,7 +30,7 @@ fs.readFile('./examples/index.html', {encoding: 'utf8'}, function (e, html) {
 var config = {
     plugins: {
         google: {
-            module: '/plugins/oauth.js',
+            module: '/#Plugin', // normally would use 'mixdown-oauth#Plugin'
             options: {
                 provider: 'google',
                 clientSecret: 'v75vSYduofxAu1nizreK4HUT',
@@ -42,7 +42,7 @@ var config = {
             }
         },
         facebook: {
-            module: '/plugins/oauth.js',
+            module: '/#Plugin', // normally would use 'mixdown-oauth#Plugin'
             options: {
                 provider: 'facebook',
                 clientSecret: 'a0028d29c434a19f5820484d13b37771',
@@ -60,7 +60,7 @@ var config = {
 // var config = {
 //     plugins: {
 //         google: {
-//             module: '/plugins/google.js',
+//             module: '/#GooglePlugin', // normally would use 'mixdown-oauth#GooglePlugin'
 //             options: {
 //                 clientSecret: 'v75vSYduofxAu1nizreK4HUT',
 //                 clientId: '527660584577.apps.googleusercontent.com',
@@ -68,7 +68,7 @@ var config = {
 //             }
 //         },
 //         facebook: {
-//             module: '/plugins/facebook.js',
+//             module: '/#FacebookPlugin', // normally would use 'mixdown-oauth#FacebookPlugin'
 //             options: {
 //                 clientSecret: 'a0028d29c434a19f5820484d13b37771',
 //                 clientId: '502218416528431',

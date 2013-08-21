@@ -1,4 +1,3 @@
-var oauth = require('../plugins/oauth.js');
 var App = require('mixdown-server').App;
 var assert = require('assert');
 var url = require('url');
@@ -6,7 +5,7 @@ var url = require('url');
 var config = {
     plugins: {
         fboauth: {
-            module: '/plugins/facebook.js',
+            module: '/#FacebookPlugin',
             options: {
                 clientSecret: 'snakesthatcanfly',
                 clientId: 'cia',

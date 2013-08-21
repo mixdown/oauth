@@ -1,4 +1,4 @@
-var FBOAuth = require('../lib/facebook.js');
+var FBOAuth = require('../').FacebookOAuth;
 var assert = require('assert');
 var url = require('url');
 

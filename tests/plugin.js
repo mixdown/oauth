@@ -7,7 +7,7 @@ var _ = require('lodash'),
 var config = {
     plugins: {
         oauth: {
-            module: '/plugins/oauth.js',
+            module: '/#Plugin',
             options: {
                 provider: 'google',
                 clientSecret: 'v75vSYduofxAu1nizreK4HUT',

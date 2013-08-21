@@ -3,7 +3,7 @@ module.exports = {
     FacebookOAuth: require('./lib/facebook'),
     GoogleOAuth: require('./lib/google'),
     
-    Plugin: require('./plugin/oauth'),
-    FacebookPlugin: require('./plugin/facebook'),
-    GooglePlugin: require('./plugin/google')
+    Plugin: require('./plugins/oauth'),
+    FacebookPlugin: require('./plugins/facebook'),
+    GooglePlugin: require('./plugins/google')
 };

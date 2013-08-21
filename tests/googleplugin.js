@@ -6,7 +6,7 @@ var url = require('url');
 var config = {
     plugins: {
         googleoauth: {
-            module: '/plugins/google.js',
+            module: '/#GooglePlugin',
             options: {
                 clientSecret: "oscar's stash of diamonds",
                 clientId: 'sesamestreet',

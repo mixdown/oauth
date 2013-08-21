@@ -1,4 +1,4 @@
-var OAuth = require('../lib/oauth.js');
+var OAuth = require('../').OAuth;
 var assert = require('assert');
 var url = require('url');
 var _ = require('lodash');
