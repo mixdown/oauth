@@ -1,5 +1,5 @@
 # mixdown-oauth
-OAuth library and [mixdown](https://github.com/mixdown) plugin. Facilitates communication between browsers and OAuth providers. Wraps [node-oauth](https://github.com/ciaranj/node-oauth).
+OAuth library and [mixdown](https://github.com/mixdown) plugin. Facilitates communication between browsers and OAuth providers. Wraps [node-oauth](https://github.com/ciaranj/node-oauth) and provides Google and Facebook flavors out of the box.
 
 ## Installation
 Install with `npm install mixdown-oauth`.
@@ -130,6 +130,12 @@ Used to parse the callback response upon login. Call this from your callback han
 
 ### parseResponse(response)
 
-This is just a hook to inject modifications to the OAuth provider's response. Override this for custom logic and return the parsed results.
+This is an interface to inject modifications to the OAuth provider's response. Override this for custom logic and return the parsed results.
 
 - `response` object returned from OAuth provider.
+
+### getUser(accessToken, callback)
+
+This is an interface to get user profile information from the OAuth provider. If called without being overridden, it will throw an error. However, it is implemented on the Facebook and Google variants.
+
+This should standardize the user's ID, first name, last name to `id`, `first_name`, `last_name` and `email`.
